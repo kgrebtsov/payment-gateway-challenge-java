@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Gateway Demo</title>
+  <style>
+    :root {
+      --bg: #f5f1e8;
+      --panel: #fffdf7;
+      --ink: #1f1f1f;
+      --muted: #6b6b6b;
+      --line: #ded6c7;
+      --accent: #176b5d;
+      --accent-2: #0f4f45;
+      --danger: #a63b32;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 20% 10%, #fff7d6 0, transparent 35%),
+        radial-gradient(circle at 85% 15%, #d8efe9 0, transparent 40%),
+        var(--bg);
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 24px auto;
+      padding: 16px;
+    }
+
+    .hero {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 1.8rem;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+    }
+
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: 1.15rem;
+    }
+
+    form, .stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .row {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .row3 {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    label {
+      display: grid;
+      gap: 4px;
+      font-size: 0.9rem;
+    }
+
+    input, select, button {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font: inherit;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    input:focus, select:focus {
+      outline: 2px solid rgba(23, 107, 93, 0.25);
+      border-color: var(--accent);
+    }
+
+    button {
+      cursor: pointer;
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+
+    button:hover {
+      background: var(--accent-2);
+      border-color: var(--accent-2);
+    }
+
+    button.secondary {
+      background: #fff;
+      color: var(--ink);
+      border-color: var(--line);
+    }
+
+    .tiny {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .status {
+      min-height: 22px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    pre {
+      margin: 0;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #f9f7f1;
+      font-family: var(--mono);
+      font-size: 12px;
+      overflow: auto;
+      max-height: 420px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-size: 0.8rem;
+      margin-left: 6px;
+      background: #fff;
+    }
+
+    @media (max-width: 860px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .row, .row3 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <h1>Payment Gateway Demo</h1>
+    <p class="subtitle">Simple UI to create a payment and fetch it back. Run the app, open this page, click around.</p>
+  </section>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Create Payment <span class="pill">POST /payments</span></h2>
+      <form id="create-form">
+        <div class="row">
+          <label>
+            Idempotency-Key
+            <input id="idempotencyKey" type="text" required>
+          </label>
+          <label>
+            X-Request-Id (optional)
+            <input id="requestId" type="text" placeholder="leave empty to auto-generate">
+          </label>
+        </div>
+
+        <label>
+          Card Number
+          <input id="cardNumber" type="text" inputmode="numeric" value="4111111111111111" required>
+        </label>
+
+        <div class="row3">
+          <label>
+            Expiry Month
+            <input id="expiryMonth" type="number" min="1" max="12" value="12" required>
+          </label>
+          <label>
+            Expiry Year
+            <input id="expiryYear" type="number" min="2026" value="2027" required>
+          </label>
+          <label>
+            CVV
+            <input id="cvv" type="text" inputmode="numeric" value="123" required>
+          </label>
+        </div>
+
+        <div class="row">
+          <label>
+            Currency
+            <select id="currency">
+              <option>GBP</option>
+              <option>EUR</option>
+              <option>USD</option>
+            </select>
+          </label>
+          <label>
+            Amount (minor units)
+            <input id="amount" type="number" min="1" value="100" required>
+          </label>
+        </div>
+
+        <div class="row">
+          <button type="button" class="secondary" id="regen-idem">Generate Idempotency Key</button>
+          <button type="submit">Send Payment</button>
+        </div>
+
+        <div class="row3">
+          <button type="button" class="secondary" id="preset-authorized">Preset: Authorized</button>
+          <button type="button" class="secondary" id="preset-declined">Preset: Declined</button>
+          <button type="button" class="secondary" id="preset-bank-503">Preset: Bank 503</button>
+        </div>
+
+        <div id="create-status" class="status"></div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Get Payment <span class="pill">GET /payments/{id}</span></h2>
+      <div class="stack">
+        <label>
+          Payment ID
+          <input id="lookupPaymentId" type="text" placeholder="paste paymentId from POST response">
+        </label>
+
+        <div class="row">
+          <button type="button" id="fetch-payment">Fetch Payment</button>
+          <button type="button" class="secondary" id="copy-last-id">Use Last Created ID</button>
+        </div>
+
+        <div id="get-status" class="status"></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="card" style="margin-top:16px;">
+    <h2>Response Viewer</h2>
+    <p class="tiny">Shows HTTP status, `X-Request-Id`, and response JSON.</p>
+    <pre id="output">Ready.</pre>
+  </section>
+</div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+
+  const state = {
+    lastPaymentId: "",
+  };
+
+  function generateKey() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return "idem-" + Date.now() + "-" + Math.random().toString(16).slice(2);
+  }
+
+  function applyPreset(kind) {
+    const presets = {
+      authorized: { cardNumber: "4111111111111111", amount: 100, currency: "GBP", cvv: "123" },
+      declined: { cardNumber: "4000000000000002", amount: 100, currency: "EUR", cvv: "123" },
+      bank503: { cardNumber: "4000000000000010", amount: 100, currency: "USD", cvv: "123" }
+    };
+    const p = presets[kind];
+    if (!p) return;
+    $("cardNumber").value = p.cardNumber;
+    $("amount").value = p.amount;
+    $("currency").value = p.currency;
+    $("cvv").value = p.cvv;
+    $("expiryMonth").value = "12";
+    $("expiryYear").value = "2027";
+    $("idempotencyKey").value = generateKey();
+    setStatus($("create-status"), "Loaded preset: " + kind);
+  }
+
+  function setStatus(el, message, isError = false) {
+    el.textContent = message || "";
+    el.classList.toggle("error", !!isError);
+  }
+
+  function showOutput(title, response, bodyText) {
+    const lines = [];
+    lines.push(title);
+    if (response) {
+      lines.push("HTTP " + response.status + " " + response.statusText);
+      lines.push("X-Request-Id: " + (response.headers.get("X-Request-Id") || "(missing)"));
+    }
+    lines.push("");
+    try {
+      lines.push(JSON.stringify(JSON.parse(bodyText), null, 2));
+    } catch {
+      lines.push(bodyText || "(empty body)");
+    }
+    $("output").textContent = lines.join("\n");
+  }
+
+  async function sendPayment(event) {
+    event.preventDefault();
+    setStatus($("create-status"), "Sending...");
+
+    const payload = {
+      cardNumber: $("cardNumber").value.trim(),
+      expiryMonth: Number($("expiryMonth").value),
+      expiryYear: Number($("expiryYear").value),
+      currency: $("currency").value,
+      amount: Number($("amount").value),
+      cvv: $("cvv").value.trim(),
+    };
+
+    const headers = {
+      "Content-Type": "application/json",
+      "Idempotency-Key": $("idempotencyKey").value.trim(),
+    };
+    const requestId = $("requestId").value.trim();
+    if (requestId) headers["X-Request-Id"] = requestId;
+
+    try {
+      const response = await fetch("/payments", {
+        method: "POST",
+        headers,
+        body: JSON.stringify(payload),
+      });
+      const bodyText = await response.text();
+      showOutput("POST /payments", response, bodyText);
+
+      if (response.ok) {
+        const data = JSON.parse(bodyText);
+        state.lastPaymentId = data.paymentId || "";
+        if (state.lastPaymentId) $("lookupPaymentId").value = state.lastPaymentId;
+        setStatus($("create-status"), "Payment request completed.");
+      } else {
+        setStatus($("create-status"), "Request failed (" + response.status + ").", true);
+      }
+    } catch (err) {
+      showOutput("POST /payments", null, String(err));
+      setStatus($("create-status"), "Network error. Is the Spring app running on this page?", true);
+    }
+  }
+
+  async function fetchPayment() {
+    const paymentId = $("lookupPaymentId").value.trim();
+    if (!paymentId) {
+      setStatus($("get-status"), "Enter a paymentId first.", true);
+      return;
+    }
+
+    setStatus($("get-status"), "Fetching...");
+
+    try {
+      const response = await fetch("/payments/" + encodeURIComponent(paymentId));
+      const bodyText = await response.text();
+      showOutput("GET /payments/" + paymentId, response, bodyText);
+
+      if (response.ok) {
+        setStatus($("get-status"), "Payment loaded.");
+      } else {
+        setStatus($("get-status"), "Request failed (" + response.status + ").", true);
+      }
+    } catch (err) {
+      showOutput("GET /payments/" + paymentId, null, String(err));
+      setStatus($("get-status"), "Network error. Is the Spring app running on this page?", true);
+    }
+  }
+
+  $("regen-idem").addEventListener("click", () => {
+    $("idempotencyKey").value = generateKey();
+  });
+
+  $("copy-last-id").addEventListener("click", () => {
+    if (state.lastPaymentId) {
+      $("lookupPaymentId").value = state.lastPaymentId;
+      setStatus($("get-status"), "Filled with last created paymentId.");
+    } else {
+      setStatus($("get-status"), "No payment created yet.", true);
+    }
+  });
+
+  $("create-form").addEventListener("submit", sendPayment);
+  $("fetch-payment").addEventListener("click", fetchPayment);
+  $("preset-authorized").addEventListener("click", () => applyPreset("authorized"));
+  $("preset-declined").addEventListener("click", () => applyPreset("declined"));
+  $("preset-bank-503").addEventListener("click", () => applyPreset("bank503"));
+
+  $("idempotencyKey").value = generateKey();
+</script>
+</body>
+</html>
