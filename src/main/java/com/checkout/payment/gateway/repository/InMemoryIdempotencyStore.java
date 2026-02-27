@@ -30,6 +30,7 @@ public class InMemoryIdempotencyStore {
   }
 
   public static final class Reservation {
+
     private final String key;
     private final Entry entry;
     private final boolean owner;
@@ -54,9 +55,11 @@ public class InMemoryIdempotencyStore {
   }
 
   private record Entry(String payloadFingerprint, CompletableFuture<PaymentRecord> future) {
+
   }
 
   public static final class PayloadConflictException extends RuntimeException {
+
     @Serial
     private static final long serialVersionUID = 1L;
   }

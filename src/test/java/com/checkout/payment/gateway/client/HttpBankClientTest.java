@@ -3,8 +3,8 @@ package com.checkout.payment.gateway.client;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.client.ExpectedCount.once;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
@@ -19,9 +19,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.test.web.client.MockRestServiceServer;
 
 class HttpBankClientTest {
 
@@ -39,7 +39,8 @@ class HttpBankClientTest {
     bankClientProperties = new BankClientProperties("http://localhost:8080", "/payments");
     restTemplate = new RestTemplate();
     mockServer = MockRestServiceServer.bindTo(restTemplate).build();
-    httpBankClient = new HttpBankClient(restTemplate, errorTranslator, meterRegistry, bankClientProperties);
+    httpBankClient = new HttpBankClient(restTemplate, errorTranslator, meterRegistry,
+        bankClientProperties);
   }
 
   @Test
@@ -126,7 +127,8 @@ class HttpBankClientTest {
     }, errorTranslator, meterRegistry, bankClientProperties);
 
     BankUnavailableException ex =
-        assertThrows(BankUnavailableException.class, () -> timeoutClient.authorize(sampleRequest()));
+        assertThrows(BankUnavailableException.class,
+            () -> timeoutClient.authorize(sampleRequest()));
     assertSame(cause, ex.getCause());
     assertEquals(1.0, meterRegistry.get("payment_bank_errors_total").counter().count());
     assertEquals(1L, meterRegistry.get("bank_call_latency").timer().count());

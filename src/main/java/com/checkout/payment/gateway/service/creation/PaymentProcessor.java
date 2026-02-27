@@ -1,11 +1,11 @@
 package com.checkout.payment.gateway.service.creation;
 
+import static net.logstash.logback.argument.StructuredArguments.keyValue;
+
 import com.checkout.payment.gateway.client.BankClient;
 import com.checkout.payment.gateway.client.BankPaymentRequest;
 import com.checkout.payment.gateway.client.BankPaymentResult;
 import com.checkout.payment.gateway.enums.PaymentStatus;
-import static net.logstash.logback.argument.StructuredArguments.keyValue;
-
 import com.checkout.payment.gateway.model.CreatePaymentRequest;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;

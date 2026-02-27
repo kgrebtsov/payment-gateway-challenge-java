@@ -41,6 +41,15 @@ class PaymentGatewayBankSimulatorE2eTest {
         "Bank simulator is not running on localhost:8080. Start it with docker-compose up");
   }
 
+  private static boolean isTcpPortOpen(String host, int port) {
+    try (Socket socket = new Socket()) {
+      socket.connect(new InetSocketAddress(host, port), 500);
+      return true;
+    } catch (IOException ex) {
+      return false;
+    }
+  }
+
   @Test
   void oddEndingCardIsAuthorizedBySimulatorThroughGateway() throws Exception {
     ResponseEntity<String> response = postPayment("4111111111111111", 100);
@@ -99,14 +108,5 @@ class PaymentGatewayBankSimulatorE2eTest {
           "cvv": "123"
         }
         """.formatted(cardNumber, amount);
-  }
-
-  private static boolean isTcpPortOpen(String host, int port) {
-    try (Socket socket = new Socket()) {
-      socket.connect(new InetSocketAddress(host, port), 500);
-      return true;
-    } catch (IOException ex) {
-      return false;
-    }
   }
 }

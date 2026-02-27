@@ -189,10 +189,12 @@ class PaymentGatewayServiceTest {
         paymentsRepository,
         new DirectPaymentExecutionStrategy(paymentCreationWorkflow),
         new IdempotentPaymentExecutionStrategy(
-            new PaymentIdempotencyExecutor(new InMemoryIdempotencyStore(), new PaymentRequestFingerprintGenerator()),
+            new PaymentIdempotencyExecutor(new InMemoryIdempotencyStore(),
+                new PaymentRequestFingerprintGenerator()),
             paymentCreationWorkflow));
 
-    CreatePaymentRequest request = new CreatePaymentRequest("4111111111111111", 3, 2026, "GBP", 100, "123");
+    CreatePaymentRequest request = new CreatePaymentRequest("4111111111111111", 3, 2026, "GBP", 100,
+        "123");
 
     PaymentResponse first = expiringAwareService.createPayment("stable-replay-key", request);
     now.set(Instant.parse("2026-04-01T00:00:00Z"));

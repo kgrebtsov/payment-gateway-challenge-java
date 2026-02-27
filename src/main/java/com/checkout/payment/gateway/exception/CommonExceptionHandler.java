@@ -96,7 +96,8 @@ public class CommonExceptionHandler {
   }
 
   private ErrorDetail toErrorDetail(FieldError fieldError) {
-    String message = fieldError.getDefaultMessage() == null ? "Invalid value" : fieldError.getDefaultMessage();
+    String message =
+        fieldError.getDefaultMessage() == null ? "Invalid value" : fieldError.getDefaultMessage();
     return new ErrorDetail(fieldError.getField(), message);
   }
 }

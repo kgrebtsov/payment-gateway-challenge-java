@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Payment Gateway Demo</title>
   <style>
     :root {
@@ -25,10 +25,9 @@
       margin: 0;
       font-family: Georgia, "Times New Roman", serif;
       color: var(--ink);
-      background:
-        radial-gradient(circle at 20% 10%, #fff7d6 0, transparent 35%),
-        radial-gradient(circle at 85% 15%, #d8efe9 0, transparent 40%),
-        var(--bg);
+      background: radial-gradient(circle at 20% 10%, #fff7d6 0, transparent 35%),
+      radial-gradient(circle at 85% 15%, #d8efe9 0, transparent 40%),
+      var(--bg);
     }
 
     .wrap {
@@ -174,6 +173,7 @@
       .grid {
         grid-template-columns: 1fr;
       }
+
       .row, .row3 {
         grid-template-columns: 1fr;
       }
@@ -184,7 +184,8 @@
 <div class="wrap">
   <section class="hero">
     <h1>Payment Gateway Demo</h1>
-    <p class="subtitle">Simple UI to create a payment and fetch it back. Run the app, open this page, click around.</p>
+    <p class="subtitle">Simple UI to create a payment and fetch it back. Run the app, open this
+      page, click around.</p>
   </section>
 
   <div class="grid">
@@ -194,31 +195,31 @@
         <div class="row">
           <label>
             Idempotency-Key
-            <input id="idempotencyKey" type="text" required>
+            <input id="idempotencyKey" required type="text">
           </label>
           <label>
             X-Request-Id (optional)
-            <input id="requestId" type="text" placeholder="leave empty to auto-generate">
+            <input id="requestId" placeholder="leave empty to auto-generate" type="text">
           </label>
         </div>
 
         <label>
           Card Number
-          <input id="cardNumber" type="text" inputmode="numeric" value="4111111111111111" required>
+          <input id="cardNumber" inputmode="numeric" required type="text" value="4111111111111111">
         </label>
 
         <div class="row3">
           <label>
             Expiry Month
-            <input id="expiryMonth" type="number" min="1" max="12" value="12" required>
+            <input id="expiryMonth" max="12" min="1" required type="number" value="12">
           </label>
           <label>
             Expiry Year
-            <input id="expiryYear" type="number" min="2026" value="2027" required>
+            <input id="expiryYear" min="2026" required type="number" value="2027">
           </label>
           <label>
             CVV
-            <input id="cvv" type="text" inputmode="numeric" value="123" required>
+            <input id="cvv" inputmode="numeric" required type="text" value="123">
           </label>
         </div>
 
@@ -233,22 +234,22 @@
           </label>
           <label>
             Amount (minor units)
-            <input id="amount" type="number" min="1" value="100" required>
+            <input id="amount" min="1" required type="number" value="100">
           </label>
         </div>
 
         <div class="row">
-          <button type="button" class="secondary" id="regen-idem">Generate Idempotency Key</button>
+          <button class="secondary" id="regen-idem" type="button">Generate Idempotency Key</button>
           <button type="submit">Send Payment</button>
         </div>
 
         <div class="row3">
-          <button type="button" class="secondary" id="preset-authorized">Preset: Authorized</button>
-          <button type="button" class="secondary" id="preset-declined">Preset: Declined</button>
-          <button type="button" class="secondary" id="preset-bank-503">Preset: Bank 503</button>
+          <button class="secondary" id="preset-authorized" type="button">Preset: Authorized</button>
+          <button class="secondary" id="preset-declined" type="button">Preset: Declined</button>
+          <button class="secondary" id="preset-bank-503" type="button">Preset: Bank 503</button>
         </div>
 
-        <div id="create-status" class="status"></div>
+        <div class="status" id="create-status"></div>
       </form>
     </section>
 
@@ -257,15 +258,15 @@
       <div class="stack">
         <label>
           Payment ID
-          <input id="lookupPaymentId" type="text" placeholder="paste paymentId from POST response">
+          <input id="lookupPaymentId" placeholder="paste paymentId from POST response" type="text">
         </label>
 
         <div class="row">
-          <button type="button" id="fetch-payment">Fetch Payment</button>
-          <button type="button" class="secondary" id="copy-last-id">Use Last Created ID</button>
+          <button id="fetch-payment" type="button">Fetch Payment</button>
+          <button class="secondary" id="copy-last-id" type="button">Use Last Created ID</button>
         </div>
 
-        <div id="get-status" class="status"></div>
+        <div class="status" id="get-status"></div>
       </div>
     </section>
   </div>
@@ -291,9 +292,9 @@
 
   function applyPreset(kind) {
     const presets = {
-      authorized: { cardNumber: "4111111111111111", amount: 100, currency: "GBP", cvv: "123" },
-      declined: { cardNumber: "4000000000000002", amount: 100, currency: "EUR", cvv: "123" },
-      bank503: { cardNumber: "4000000000000010", amount: 100, currency: "USD", cvv: "123" }
+      authorized: {cardNumber: "4111111111111111", amount: 100, currency: "GBP", cvv: "123"},
+      declined: {cardNumber: "4000000000000002", amount: 100, currency: "EUR", cvv: "123"},
+      bank503: {cardNumber: "4000000000000010", amount: 100, currency: "USD", cvv: "123"}
     };
     const p = presets[kind];
     if (!p) return;

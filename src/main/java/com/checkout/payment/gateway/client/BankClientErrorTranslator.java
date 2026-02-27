@@ -1,9 +1,9 @@
 package com.checkout.payment.gateway.client;
 
-import com.checkout.payment.gateway.exception.BankClientException;
-import com.checkout.payment.gateway.exception.BankUnavailableException;
 import static net.logstash.logback.argument.StructuredArguments.keyValue;
 
+import com.checkout.payment.gateway.exception.BankClientException;
+import com.checkout.payment.gateway.exception.BankUnavailableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

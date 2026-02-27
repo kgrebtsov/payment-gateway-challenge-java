@@ -1,11 +1,11 @@
 package com.checkout.payment.gateway.service;
 
-import com.checkout.payment.gateway.exception.PaymentNotFoundException;
 import static net.logstash.logback.argument.StructuredArguments.keyValue;
 
+import com.checkout.payment.gateway.exception.PaymentNotFoundException;
 import com.checkout.payment.gateway.model.CreatePaymentRequest;
-import com.checkout.payment.gateway.model.PaymentResponse;
 import com.checkout.payment.gateway.model.PaymentRecord;
+import com.checkout.payment.gateway.model.PaymentResponse;
 import com.checkout.payment.gateway.repository.InMemoryPaymentsRepository;
 import com.checkout.payment.gateway.service.execution.DirectPaymentExecutionStrategy;
 import com.checkout.payment.gateway.service.execution.IdempotentPaymentExecutionStrategy;

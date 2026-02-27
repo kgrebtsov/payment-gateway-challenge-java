@@ -1,8 +1,8 @@
 package com.checkout.payment.gateway.service.idempotency;
 
-import com.checkout.payment.gateway.exception.IdempotencyConflictException;
 import static net.logstash.logback.argument.StructuredArguments.keyValue;
 
+import com.checkout.payment.gateway.exception.IdempotencyConflictException;
 import com.checkout.payment.gateway.model.CreatePaymentRequest;
 import com.checkout.payment.gateway.model.PaymentRecord;
 import com.checkout.payment.gateway.repository.InMemoryIdempotencyStore;
@@ -31,7 +31,8 @@ public class PaymentIdempotencyExecutor {
       String idempotencyKey,
       CreatePaymentRequest request,
       Supplier<PaymentRecord> ownerComputation) {
-    InMemoryIdempotencyStore.Reservation reservation = reserveOrThrowConflict(idempotencyKey, request);
+    InMemoryIdempotencyStore.Reservation reservation = reserveOrThrowConflict(idempotencyKey,
+        request);
     if (!reservation.owner()) {
       LOG.info("payment.idempotent.replay",
           keyValue("event", "payment.idempotent.replay"),
@@ -80,5 +81,6 @@ public class PaymentIdempotencyExecutor {
   }
 
   public record ExecutionResult(PaymentRecord payment, boolean replayed) {
+
   }
 }

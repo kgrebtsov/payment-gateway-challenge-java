@@ -7,4 +7,5 @@ public record BankClientProperties(
     String baseUrl,
     String paymentsPath
 ) {
+
 }

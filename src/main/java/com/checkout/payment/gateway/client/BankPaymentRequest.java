@@ -9,4 +9,5 @@ public record BankPaymentRequest(
     Integer amount,
     String cvv
 ) {
+
 }

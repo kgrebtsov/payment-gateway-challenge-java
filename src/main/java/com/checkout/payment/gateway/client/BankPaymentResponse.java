@@ -7,4 +7,5 @@ public record BankPaymentResponse(
     @JsonProperty("authorization_code")
     String authorizationCode
 ) {
+
 }

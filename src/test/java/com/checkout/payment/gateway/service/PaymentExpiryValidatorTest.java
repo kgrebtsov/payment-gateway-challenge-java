@@ -38,7 +38,8 @@ class PaymentExpiryValidatorTest {
 
   @Test
   void rejectsPastExpiry() {
-    assertThrows(InvalidPaymentRequestException.class, () -> validator.validateFutureExpiry(1, 2026));
+    assertThrows(InvalidPaymentRequestException.class,
+        () -> validator.validateFutureExpiry(1, 2026));
   }
 
   @Test

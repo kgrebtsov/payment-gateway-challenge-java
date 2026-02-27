@@ -13,6 +13,7 @@ public record PaymentResponse(
     Integer expiryMonth,
     Integer expiryYear
 ) {
+
   public static PaymentResponse from(PaymentRecord payment) {
     return new PaymentResponse(
         payment.paymentId(),

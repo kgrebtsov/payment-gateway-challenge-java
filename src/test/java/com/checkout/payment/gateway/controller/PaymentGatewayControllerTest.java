@@ -253,14 +253,16 @@ class PaymentGatewayControllerTest {
         .content(payload));
   }
 
-  private ResultActions createPaymentWithIdempotency(String idempotencyKey, String payload) throws Exception {
+  private ResultActions createPaymentWithIdempotency(String idempotencyKey, String payload)
+      throws Exception {
     return mvc.perform(post(PAYMENTS_PATH)
         .header("Idempotency-Key", idempotencyKey)
         .contentType(MediaType.APPLICATION_JSON)
         .content(payload));
   }
 
-  private ResultActions createPaymentWithHeaders(String idempotencyKey, String requestId, String payload) throws Exception {
+  private ResultActions createPaymentWithHeaders(String idempotencyKey, String requestId,
+      String payload) throws Exception {
     return mvc.perform(post(PAYMENTS_PATH)
         .header("Idempotency-Key", idempotencyKey)
         .header("X-Request-Id", requestId)

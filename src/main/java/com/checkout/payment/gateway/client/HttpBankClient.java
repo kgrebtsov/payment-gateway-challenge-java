@@ -1,9 +1,9 @@
 package com.checkout.payment.gateway.client;
 
-import com.checkout.payment.gateway.configuration.BankClientProperties;
-import com.checkout.payment.gateway.exception.BankClientException;
 import static net.logstash.logback.argument.StructuredArguments.keyValue;
 
+import com.checkout.payment.gateway.configuration.BankClientProperties;
+import com.checkout.payment.gateway.exception.BankClientException;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;

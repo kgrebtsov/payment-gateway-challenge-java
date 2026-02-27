@@ -29,6 +29,17 @@ public class PaymentCreationWorkflow {
     this.paymentsRepository = paymentsRepository;
   }
 
+  private static String loggableIdempotencyKey(String idempotencyKey) {
+    return (idempotencyKey == null || idempotencyKey.isBlank()) ? "-" : idempotencyKey;
+  }
+
+  private static String extractCardLast4(String cardNumber) {
+    if (cardNumber == null || cardNumber.length() < CARD_LAST4_LENGTH) {
+      throw new IllegalArgumentException("Card number must contain at least 4 digits");
+    }
+    return cardNumber.substring(cardNumber.length() - CARD_LAST4_LENGTH);
+  }
+
   public PaymentRecord create(String idempotencyKey, CreatePaymentRequest request) {
     paymentExpiryValidator.validateFutureExpiry(request.expiryMonth(), request.expiryYear());
 
@@ -50,16 +61,5 @@ public class PaymentCreationWorkflow {
 
     paymentsRepository.save(payment);
     return payment;
-  }
-
-  private static String loggableIdempotencyKey(String idempotencyKey) {
-    return (idempotencyKey == null || idempotencyKey.isBlank()) ? "-" : idempotencyKey;
-  }
-
-  private static String extractCardLast4(String cardNumber) {
-    if (cardNumber == null || cardNumber.length() < CARD_LAST4_LENGTH) {
-      throw new IllegalArgumentException("Card number must contain at least 4 digits");
-    }
-    return cardNumber.substring(cardNumber.length() - CARD_LAST4_LENGTH);
   }
 }
